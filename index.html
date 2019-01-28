@@ -103,7 +103,7 @@ overflow: hidden;
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="attributionModal">醫院管理局2019 年度夜間、星期日及公眾假期普通科門診地圖</h5>
+            <h6 class="modal-title" id="attributionModal">醫院管理局2019 年度夜間、星期日及公眾假期普通科門診地圖</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -172,7 +172,7 @@ overflow: hidden;
         <!--<a class="navbar-brand" href="#">-->
         <div class="icon baseline">
         </div>
-        <span class="navbar-name">醫院管理局2019 年度夜間、星期日及公眾假期普通科門診服務</span>
+        <span class="navbar-name">夜間、星期日及公眾假期普通科門診地圖</span>
         </a>
       </div>
       <button class="navbar-toggler animated slideInRight faster" type="button" data-toggle="modal" data-target="#navModal"
@@ -492,7 +492,7 @@ overflow: hidden;
 <div class="card-text">
 <ul class="fa-ul" id="branchDetail">
 <li><span class="fa-li"><i class="fas fa-map-marker-alt fa-fw"></i></span><span id="cal_distance"></span></li>
-<li><span class="fa-li"><i class="fas fa-map-marker-alt fa-fw"></i></span>${prop.chi_address}</li>
+<li><span class="fa-li"><i class="fas fa-map-marker-alt fa-fw"></i></span>${prop.chi_address} <a href="https://www.google.com/maps/search/?api=1&query=${currentMkr["geometry"]["coordinates"][0]},${currentMkr["geometry"]["coordinates"][1]}" target="_blank">[打開地圖]</a></li>
 <li><span class="fa-li"><i class="fas fa-phone fa-fw"></i></span>
 ${prop.tel1}${(prop.tel2) ? '/' + prop.tel2 : ''}${(prop.tel3) ? '/' + prop.tel3 : ''}
 </li>
