@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>OpenHealthHK</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+    crossorigin="" />
+  <!-- Make sure you put this AFTER Leaflet's CSS -->
+  <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js" integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q=="
+    crossorigin=""></script>
+  <script src="clinics.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="custom.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js" charset="utf-8"></script>
+  <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
+  <script src='bootstrap-native-v4.min.js'></script>
+  <script src='luxon.min.js'></script>
+  <link rel="stylesheet" href="animate.css" />
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="holygrail.css">
+  <style>
+    .hg {
+display: grid;
+grid-template-areas: "main" "footer";
+grid-template-rows: 1fr 0;
+min-height: 100vh;
+height: 100vh;
+/* Fallback for browsers that do not support Custom Properties */
+height: calc(var(--vh, 1vh) * 100);
+}
+.hg.ad {
+grid-template-rows: 1fr 50px;
+}
+.hg.ad #mapid {
+height: 100%;
+width: 100%;
+}
+@media only screen and (min-width: 468px) {
+.hg.ad {
+grid-template-rows: 1fr 60px;
+}
+}
+@media only screen and (min-width: 728px) {
+.hg.ad {
+grid-template-rows: 1fr 90px;
+}
+}
+.hg-main {
+position: relative;
+overflow: hidden;
+}
+</style>
+  <script>
+    // Responsive Height
+    var height;
+    // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
+    let vh = window.innerHeight * 0.01;
+    // Then we set the value in the --vh custom property to the root of the document
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  </script>
+
+</head>
+
+<body class="hg">
+  <main class="hg-main">
+    <!-- Welcome Modal -->
+    <div class="modal fade" id="welcomeModal" tabindex="-1" role="dialog" aria-labelledby="welcomeModal" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title mx-auto" id="welcomeModal">Open Health HK</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body text-center">
+            <p>醫院管理局2019 年度夜間、星期日及公眾假期普通科門診服務</p>
+            <p>&nbsp;</p>
+            <ul class="list-unstyled list-inline">
+              <!--<li class="list-inline-item"></li><img src="pin-247.png" class="inline_img">24小時開放</li>-->
+              <li class="list-inline-item"></li><img src="pin-open.png" class="inline_img">開放中</li>
+              <li class="list-inline-item"></li><img src="pin-close.png" class="inline_img">休息</li>
+            </ul>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger mx-auto" data-dismiss="modal">明白</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Attribution Modal -->
+    <div class="modal fade" id="attributionModal" tabindex="-1" role="dialog" aria-labelledby="attributionModal"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="attributionModal">醫院管理局2019 年度夜間、星期日及公眾假期普通科門診地圖</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h5>資料來源</h5>
+            <ul class="list-unstyled">
+              <li><a href="http://www.ha.org.hk/haho/ho/hesd/gopc2019holiday_chi.pdf" target="_blank">醫院管理局 （PDF檔案）</a></li>
+            </ul>
+            <p>最後更新日期：2018-12-14</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Menu Modal -->
+    <!-- Check this for effect: https://stackoverflow.com/questions/32168234/change-the-bootstrap-modal-effect -->
+    <div class="modal animated slideInRight" id="navModal" tabindex="-1" role="dialog" aria-labelledby="navModal"
+      aria-hidden="true">
+      <div class="modal-dialog nav_modal" role="document">
+        <div class="modal-content nav_modal">
+          <div class="modal-header">
+            <h5 class="modal-title" id="navModal">夜間、星期日及公眾假期門診</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <ul class="list-unstyled list-inline">
+              <!--<li class="list-inline-item">
+              <img src="pin-247.png" class="inline_img">
+              <span>24小時開放</span>
+              </li>-->
+              <li class="list-inline-item">
+                <img src="pin-open.png" class="inline_img">
+                <span>開放中</span>
+              </li>
+              <li class="list-inline-item">
+                <img src="pin-close.png" class="inline_img">
+                <span>休息</span>
+              </li>
+            </ul>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <!--<i class="fas fa-caret-right"></i>-->
+                <a class="list-group-item-action" href="#" onclick="showAllClinic();">夜間、星期日及公眾假期普通科門診</a>
+              </li>
+              <li class="list-group-item">
+                <a class="list-group-item-action" href="#" onclick="showPhClinic();">星期日及公眾假期普通科門診</a>
+              </li>
+              <li class="list-group-item">
+                <a class="list-group-item-action" href="#" onclick="showAvailableClinic();">只顯示現在開放診所</a>
+              </li>
+              <li class="list-group-item">
+                <a class="list-group-item-action attribution" href="#" data-toggle="modal" data-target="#attributionModal">資料來源</a>
+              </li>
+            </ul>
+          </div>
+          <div class="modal-footer">OpenHealthHK</div>
+        </div>
+      </div>
+    </div>
+    <!-- First Navbar -->
+    <nav class="navbar navbar-light bg-light" id="clinic-nav">
+      <div class="nav-brand-cont">
+        <span class="inapp-back-button d-none"></span>
+        <!--<a class="navbar-brand" href="#">-->
+        <div class="icon baseline">
+        </div>
+        <span class="navbar-name">醫院管理局2019 年度夜間、星期日及公眾假期普通科門診服務</span>
+        </a>
+      </div>
+      <button class="navbar-toggler animated slideInRight faster" type="button" data-toggle="modal" data-target="#navModal"
+        aria-controls="navModal" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </nav>
+    <!-- Second "Navbar" -->
+    <ul class="nav nav-tabs nav-fill">
+      <!--<li class="nav-item">
+      <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+      <label class="form-check-label" for="defaultCheck1">Default checkbox</label>
+      </div>
+      </li>-->
+      <li class="nav-item dropdown sub-district-nav">
+        <button class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="false">
+          香港
+        </button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" data-sub-district="wanchaicausewaybay" data-lat="22.274860" data-lng="114.181746">灣仔、銅鑼灣</a>
+          <!--<a class="dropdown-item" data-sub-district="central" data-lat="22.281300" data-lng="114.155863">中環</a>-->
+          <a class="dropdown-item" data-sub-district="saiwan" data-lat="22.284786" data-lng="114.137310">西環</a>
+          <!--<a class="dropdown-item" data-sub-district="northpoint" data-lat="22.286839" data-lng="114.195207">北角</a>-->
+          <a class="dropdown-item" data-sub-district="saiwanho" data-lat="22.282951" data-lng="114.221201">西灣河</a>
+        </div>
+      </li>
+      </div>
+      <li class="nav-item dropdown sub-district-nav">
+        <button class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="false">
+          九龍
+        </button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" data-sub-district="mongkok" data-lat="22.31326" data-lng="114.16932">油尖旺</a>
+          <!--<a class="dropdown-item" data-sub-district="kowlooncity" data-lat="22.315782" data-lng="114.187887">九龍城</a>-->
+          <a class="dropdown-item" data-sub-district="kwuntong" data-lat="22.313683" data-lng="114.221671">觀塘</a>
+          <a class="dropdown-item" data-sub-district="shamshuipoprinceedward" data-lat="22.329168" data-lng="114.163337">深水埗、太子</a>
+        </div>
+        </div>
+      </li>
+      <li class="nav-item dropdown sub-district-nav">
+        <button class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown" data-persist="true"
+          aria-haspopup="true" aria-expanded="false">
+          新界
+        </button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" data-sub-district="tsuenwan" data-lat="22.371299" data-lng="114.115029">荃灣</a>
+          <a class="dropdown-item" data-sub-district="tuenmun" data-lat="22.389242" data-lng="113.974507">屯門</a>
+          <a class="dropdown-item" data-sub-district="yuenlong" data-lat="22.444457" data-lng="114.026956">元朗</a>
+          <a class="dropdown-item" data-sub-district="northdistrict" data-lat="22.502254" data-lng="114.135678">北區</a>
+          <a class="dropdown-item" data-sub-district="taipo" data-lat="22.451605" data-lng="114.164757">大埔</a>
+          <a class="dropdown-item" data-sub-district="shatin" data-lat="22.379762" data-lng="114.182577">沙田</a>
+          <!--<a class="dropdown-item" data-sub-district="saikung" data-lat="22.383511" data-lng="114.271238">西貢</a>-->
+          <a class="dropdown-item" data-sub-district="tseungkwano" data-lat="22.314464" data-lng="114.262384">將軍澳</a>
+        </div>
+    </ul>
+    <div id='mapid'></div>
+    <div class="card clinic-card card--hidden"></div>
+    <script>
+      // Global Variable
+      var DateTime = luxon.DateTime;
+      var clinicMap;
+      var clinicLayer;
+      var phClinicLayer;
+      var availableClinicLayer;
+      var currentLayer;
+      var entrySource;
+      var initialID = 0;
+      var currentID = 1;
+      var currentMkr = {};
+      var card = document.querySelector('.clinic-card');
+      var defaultSizeIcon = L.Icon.extend({
+        options: {
+          iconSize: [30, 30]
+        }
+      });
+      var smallSizeIcon = L.Icon.extend({
+        options: {
+          iconSize: [12, 12]
+        }
+      });
+      var mediumSizeIcon = L.Icon.extend({
+        options: {
+          iconSize: [40, 40]
+        }
+      });
+      var largeSizeIcon = L.Icon.extend({
+        options: {
+          iconSize: [55, 55]
+        }
+      });
+      var red = new defaultSizeIcon({
+        iconUrl: 'pin-247.png'
+      });
+      var green = new defaultSizeIcon({
+        iconUrl: 'pin-open.png'
+      });
+      var grey = new defaultSizeIcon({
+        iconUrl: 'pin-close.png'
+      });
+
+      initMap();
+      zoomendHandler();
+      function initMap() {
+        welcome();
+        clinics.features.forEach(feature => {
+          // calculate status based on current time
+          feature.properties.status = calcBranchstatus(feature);
+        });
+
+        // Create the map
+        clinicMap = L.map('mapid', {
+          center: (screen.width >= 768) ? [22.366538, 114.174007] : [22.366538, 114.174007],
+          zoom: (screen.width >= 768) ? 11 : 10,
+          zoomSnap: 0.25,
+          maxBounds: ([
+            [21.795661, 113.073929],
+            [23.113786, 115.230749]
+          ]),
+          attributionControl: false,
+          keyboard: false // Prevent jumping in iframe
+        });
+
+        // Configure map tile layer
+        L.tileLayer('https://b.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 18,
+          minZoom: 10
+        }).addTo(clinicMap);
+
+        // Load the data from json
+        clinicLayer = L.geoJSON(clinics, {
+          onEachFeature: onEachFeature,
+          pointToLayer: function (feature, latlng) {
+            let options = {};
+            switch (feature["properties"]["status"]) {
+              case 'always_available':
+                options.icon = red;
+                break;
+              case 'available':
+                options.icon = green; // open
+                break;
+              case 'closed':
+                options.icon = grey;
+                break;
+            }
+            return L.marker(latlng, options);
+          } // End point to layer
+        }).addTo(clinicMap);
+
+        currentLayer = clinicLayer;
+
+        phClinicLayer = L.geoJSON(clinics, {
+          onEachFeature: onEachFeature,
+          pointToLayer: function (feature, latlng) {
+            let options = {};
+            switch (feature["properties"]["status"]) {
+              case 'always_available':
+                options.icon = red;
+                break;
+              case 'available':
+                options.icon = green; // open
+                break;
+              case 'closed':
+                options.icon = grey;
+                break;
+            }
+            if (feature["properties"]["hasSunday"]) {
+              return L.marker(latlng, options);
+            } else {
+              return null;
+            }
+          } // end of pointToLayer);
+        });
+
+        availableClinicLayer = L.geoJSON(clinics, {
+          onEachFeature: onEachFeature,
+          pointToLayer: function (feature, latlng) {
+            let options = {};
+            switch (feature["properties"]["status"]) {
+              case 'always_available':
+                options.icon = red;
+                break;
+              case 'available':
+                options.icon = green; // open
+                break;
+              case 'closed':
+                options.icon = grey;
+                break;
+            }
+            if (feature["properties"]["status"] === "available") {
+              return L.marker(latlng, options);
+            } else {
+              return null;
+            }
+          } // end of pointToLayer);
+        });
+
+        // Add the zoom / locate control
+        L.control.locate({
+          collapsed: false,
+          position: 'topleft',
+          setView: false,
+          flyTo: true,
+          showPopup: false
+        }).addTo(clinicMap);
+
+        // Calculate distance
+        function calDistance(loca_info) {
+          var options = {
+            units: 'kilometers'
+          };
+          clinics.features.forEach(function (f) {
+            Object.defineProperty(f.properties, 'distance', {
+              value: turf.distance(loca_info, f.geometry, options),
+              writable: true,
+              enumerable: true,
+              configurable: true
+            });
+          })
+          clinics.features.sort(function (a, b) {
+            if (a.properties.distance > b.properties.distance) {
+              return 1;
+            }
+            if (a.properties.distance < b.properties.distance) {
+              return -1;
+            }
+            // a must be equal to b
+            return 0;
+          });
+        };  //end of calDistance
+
+        // locationfound Event handler
+        clinicMap.once('locationfound', function (e) {
+          var glatlng = [e.latlng.lng, e.latlng.lat];
+          calDistance(glatlng);
+          var line = turf.lineString([clinics.features[3].geometry.coordinates, glatlng]); // Closest 3 features
+          var bbox = turf.bbox(line);
+          temp_bound = [
+            [bbox[1], bbox[0]],
+            [bbox[3], bbox[2]]
+          ];
+          clinicMap.fitBounds(temp_bound, {
+            padding: [80, 80]
+          });
+        });
+        // End of locationfound event handler
+
+        clinicMap.on('zoomend', zoomendHandler);
+        // End of zoomend event handler
+
+        // Add popCard event handler to features
+        var card = document.querySelector('.clinic-card');
+        function onEachFeature(feature, layer) {
+          layer.on({
+            click: popCard
+          })
+        };
+
+
+        /* Calculate the status by opening_hours */
+        function calcBranchstatus(feature) {
+          // Return if no information
+          if (feature.properties["opening_hours"] == "") return "available";
+          let date = new Date();
+          let weekDay = date.getDay();
+          let hourUTC = date.getUTCHours();
+          let gmt = 8; // Clinic opening hours are based on Hong Kong Time
+          let hour = (hourUTC + gmt > 23) ? hourUTC + gmt - 24 : hourUTC + gmt;
+          let time = hour * 100 + date.getMinutes();
+          let periods = feature.properties["opening_hours"];
+          let filValue = "closed";
+          periods.forEach(days => {
+            // Always Open
+            if (days['open']['day'] == 0 && days['open']['time'] == '0000' && days['close'] == null)
+              return filValue = "always_available";
+            if (days['open']['day'] == weekDay) {
+              let open = parseInt(days['open']['time']);
+              let close = parseInt(days['close']['time']);
+              if (time >= open && time <= close) {
+                filValue = "available";
+              }
+            }
+          });
+          return filValue;
+        };
+
+
+        // Focus on a clinic, pop the info card
+        function popCard(e) {
+          currentMkr = e.target.feature;
+          let stateObj = {
+            id: currentID
+          };
+          window.history.pushState(stateObj, "", `#${entrySource}&clinicid=${currentMkr.properties.id}`);
+          let prop = currentMkr["properties"];
+          //offset the centre
+          bounds = clinicMap.getBounds();
+          lat_bounds = bounds._northEast.lat - bounds._southWest.lat;
+          let centre = currentMkr.geometry.coordinates //.reverse();
+          clinicMap.panTo([centre[1] - lat_bounds * 0.3, centre[0]]);
+          card.innerHTML =
+            `
+<div class="card-header">
+<h6 id="branchStatus" class="${prop.status}">${
+            (prop.status == "always_available") ? "24小時開放" : (prop.status == "available") ? " 開放中" : "休息"
+            }</h6>
+<span class="head_box">
+</span>
+<h5 class="card-title">${prop.chi_name}</h5>
+</div>
+<div class="clinic-card-body">
+<button type="button" class="close" id="close-card" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+<div class="card-text">
+<ul class="fa-ul" id="branchDetail">
+<li><span class="fa-li"><i class="fas fa-map-marker-alt fa-fw"></i></span><span id="cal_distance"></span></li>
+<li><span class="fa-li"><i class="fas fa-map-marker-alt fa-fw"></i></span>${prop.chi_address}</li>
+<li><span class="fa-li"><i class="fas fa-phone fa-fw"></i></span>
+${prop.tel1}${(prop.tel2) ? '/' + prop.tel2 : ''}${(prop.tel3) ? '/' + prop.tel3 : ''}
+</li>
+${(false && prop.website) ? `<li><span class="fa-li"><i class="fas fa-link fa-fw"></i></span><a data-link-type="website" class="external_link" href="${prop.website}" target="_blank">網站</a></li>` : ''}
+${(prop.fb_page) ? `<li><span class="fa-li"><i class="fab fa-facebook fa-fw"></i></span><a data-link-type="facebook" class="external_link" href="${prop.fb_page}" target="_blank">Facebook</a></li>` : ''}
+${(prop.opening_hours) ? `<li id="opening_hour_title"><span class="fa-li"><i class="fas fa-clock fa-fw"></i></span><a data-toggle="collapse" href="#opening_hours" role="button" aria-expanded="false" aria-controls="collapseExample">開放時間</a></li>` : ''}
+</ul>
+${(prop.weekday_text) ? `<ul class="collapse" id="opening_hours">${prop.weekday_text.map(
+              day => `<li>${day}</li>`.trim()).join('')}</ul>` : ''}
+<p id="remarks"></p>
+<a data-link-type="report" class="external_link" href="https://docs.google.com/forms/d/e/1FAIpQLSfICG2QsywDoxybtm6n2E_3zN2SPFg4J1HDbLB4EkZ8A4frCw/viewform?usp=pp_url&entry.1604560975=${prop.chi_name}&entry.1154394137=${prop.chi_address}" target="_blank">報料改善資料</a>
+</div>
+</div>
+`;
+          let closeCard = document.querySelector('#close-card');
+          // User close card
+          closeCard.addEventListener('click', (event) => {
+            card.classList.remove('card--expanded');
+            card.classList.add("card--hidden");
+            event.stopPropagation();
+            document.querySelectorAll('.card-footer').forEach(s => {
+              s.remove();
+            });
+          });
+          card.classList.remove("card--hidden");
+          // Prevent card expand when links are clicked
+          let allLinkOnCard = document.querySelectorAll('a');
+          allLinkOnCard.forEach(item => {
+            item.addEventListener('click', (event) => {
+              event.stopPropagation();
+            });
+          });
+          // Listener for external links on card
+          let externalLinks = document.querySelectorAll('.external_link');
+          externalLinks.forEach(el => {
+            el.addEventListener('click', (event) => {
+            })
+          });
+          var collaspeButton = document.querySelectorAll('a[data-toggle="collapse"]');
+          collaspeButton.forEach(s => {
+            s.addEventListener('click', (event) => {
+              event.preventDefault();
+              var href = s.getAttribute('href');
+              var target = document.querySelectorAll(`${href}`)[0];
+              var status = target.className === 'collapse' ? 'open' : 'close';
+              if (status === 'open') {
+                target.className = '';
+              } else {
+                target.className = 'collapse';
+              }
+            });
+          });
+
+        };
+        // End of popCard
+
+        // User expand or collase card
+        card.addEventListener('click', (event) => {
+          event.stopPropagation();
+          if (matchMedia('screen and (max-width: 700px)').matches) {
+            card.classList.toggle('card--expanded');
+          }
+        });
+
+
+        // chkWelcomed
+        function chkWelcomed() {
+          function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000)
+              .toString(16)
+              .substring(1);
+          };
+
+        };
+        // end of chkWelcomed
+
+        // welcome
+        function welcome() {
+          return; // not more welcome
+          // if (initialID == 0) {
+          var myModal = document.getElementById('welcomeModal');
+          var options = {
+            backdrop: true
+          };
+          // OR initialize and show the modal right away
+          var myModalInstance = new Modal(myModal, options);
+          if (!chkWelcomed()) {
+            myModalInstance.show();
+          }
+          var close_method = 'backdrop';
+          document.querySelector('#welcomeModal .btn').addEventListener('click', function () {
+            close_method = 'button';
+          });
+          myModal.addEventListener('hide.bs.modal', function (event) {
+
+          }, false);
+        };
+        // End of welcome()
+
+        // Get all sub-district Buttons
+        var subDistrictBtns = document.querySelectorAll('a[data-sub-district]');
+        subDistrictBtns.forEach(s => {
+          s.addEventListener('click', (event) => {
+            clinicMap.setView([s.getAttribute("data-lat"), s.getAttribute("data-lng")], 15);
+            event.stopPropagation();
+            let stateObj = {
+              subdistrict: s.getAttribute("data-sub-district")
+            };
+            window.history.pushState(stateObj, "",
+              `#subdistrict=${s.getAttribute("data-sub-district")}`);
+            s.parentNode.classList.remove('show');
+            s.parentNode.parentNode.classList.remove('show');
+          })
+        });
+        // End of setting event listener
+
+        // sideMenubutton events
+        var sideMenubutton = document.querySelectorAll('#clinic-nav .navbar-toggler');
+        sideMenubutton.forEach(s => {
+          s.addEventListener('click', (event) => {
+          });
+        });
+        // End of sideMenubutton events
+
+        var sideMenuMethod = 'backdrop';
+        var sideMenuModal = document.getElementById('navModal');
+        //
+        sideMenuModal.addEventListener('hide.bs.modal', function (event) {
+          sideMenuMethod = 'backdrop';
+        }, false);
+        //
+        var sideMenuClose = document.querySelectorAll('#navModal .close');
+        sideMenuClose.forEach(s => {
+          s.addEventListener('click', (event) => {
+            sideMenuMethod = 'close';
+          });
+        });
+        // End of sideMenuClose.forEach
+
+        // Set style
+        var sideMenuLinks = document.querySelectorAll('#navModal .list-group-item-action');
+        sideMenuLinks.forEach(s => {
+          s.addEventListener('click', (event) => {
+            var type = '';
+            var href = s.getAttribute("href");
+            if (href.indexOf('facebook') !== -1) {
+              type = 'facebook'
+            } else if (s.classList.contains('attribution')) {
+              type = 'attribution'
+            } else {
+              type = 'other'
+            }
+          });
+        });
+        // End of sideMenuLinks.forEach
+
+        window.addEventListener('resize', function (e) {
+        });
+      }
+      // zoomend event handler
+      function zoomendHandler() {
+        var currentZoom = clinicMap.getZoom();
+        if (currentZoom >= 11.5 && currentZoom < 14) {
+          red = new defaultSizeIcon({
+            iconUrl: 'pin-247.png'
+          });
+          green = new defaultSizeIcon({
+            iconUrl: 'pin-open.png'
+          });
+          grey = new defaultSizeIcon({
+            iconUrl: 'pin-close.png'
+          });
+        } else if (currentZoom >= 14 && currentZoom < 15) {
+          red = new mediumSizeIcon({
+            iconUrl: 'pin-247.png'
+          });
+          green = new mediumSizeIcon({
+            iconUrl: 'pin-open.png'
+          });
+          grey = new mediumSizeIcon({
+            iconUrl: 'pin-close.png'
+          });
+        } else if (currentZoom >= 15) {
+          red = new largeSizeIcon({
+            iconUrl: 'pin-247.png'
+          });
+          green = new largeSizeIcon({
+            iconUrl: 'pin-open.png'
+          });
+          grey = new largeSizeIcon({
+            iconUrl: 'pin-close.png'
+          });
+        } else {
+          red = new smallSizeIcon({
+            iconUrl: 'red_dot.png'
+          });
+          green = new smallSizeIcon({
+            iconUrl: 'green_dot.png'
+          });
+          grey = new smallSizeIcon({
+            iconUrl: 'grey_dot.png'
+          });
+        }
+        // Update icon based on the current zoom
+        currentLayer.eachLayer(mkr => {
+          switch (mkr.feature["properties"]["status"]) {
+            case 'always_available':
+              icon = red;
+              break;
+            case 'available':
+              icon = green;
+              break;
+            case 'closed':
+              icon = grey;
+              break;
+          }
+          mkr.setIcon(icon);  // Update icon
+        });
+      }
+
+      function showAllClinic() {
+        if (currentLayer != clinicLayer) {
+          clinicMap.removeLayer(currentLayer);
+          clinicMap.addLayer(clinicLayer);
+          currentLayer = clinicLayer;
+          zoomendHandler();
+        }
+      }
+
+      function showPhClinic() {
+        if (currentLayer != phClinicLayer) {
+          clinicMap.removeLayer(currentLayer);
+          clinicMap.addLayer(phClinicLayer);
+          currentLayer = phClinicLayer;
+          zoomendHandler();
+        }
+      }
+
+      function showAvailableClinic() {
+        if (currentLayer != availableClinicLayer) {
+          clinicMap.removeLayer(currentLayer);
+          clinicMap.addLayer(availableClinicLayer);
+          currentLayer = availableClinicLayer;
+          zoomendHandler();
+        }
+      }
+    </script>
+  </main>
+  <footer class="hg-footer">
+
+    </div>
+  </footer>
+</body>
+
+</html>
