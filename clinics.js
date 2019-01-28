@@ -16,6 +16,7 @@ var clinics = {
               "website": "http://www.ha.org.hk/haho/ho/hesd/gopc2019holiday_chi.pdf",
               "fb_page": "",
               "remarks": "",
+              "place_id": "ChIJKx-dVxsABDQRL8YzDrs9IHM",
               "opening_hours": [
                   {
                       "close": {
@@ -121,6 +122,7 @@ var clinics = {
               "website": "http://www.ha.org.hk/haho/ho/hesd/gopc2019holiday_chi.pdf",
               "fb_page": "",
               "remarks": "",
+              "place_id": "ChIJw1H_FH8ABDQR72ITFqz8S5w",
               "opening_hours": [
                   {
                       "close": {
@@ -216,6 +218,7 @@ var clinics = {
               "website": "http://www.ha.org.hk/haho/ho/hesd/gopc2019holiday_chi.pdf",
               "fb_page": "",
               "remarks": "",
+              "place_id": "ChIJH-FIvIIBBDQRY0iJeWiVAYA",
               "opening_hours": [
                   {
                       "close": {
@@ -321,6 +324,7 @@ var clinics = {
               "website": "http://www.ha.org.hk/haho/ho/hesd/gopc2019holiday_chi.pdf",
               "fb_page": "",
               "remarks": "",
+              "place_id": "ChIJQ52WwVoABDQRoP0IVAJkbgs",
               "opening_hours": [
                   {
                       "close": {

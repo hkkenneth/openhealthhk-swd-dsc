@@ -492,7 +492,7 @@ overflow: hidden;
 <div class="card-text">
 <ul class="fa-ul" id="branchDetail">
 <li><span class="fa-li"><i class="fas fa-map-marker-alt fa-fw"></i></span><span id="cal_distance"></span></li>
-<li><span class="fa-li"><i class="fas fa-map-marker-alt fa-fw"></i></span>${prop.chi_address} <a href="https://www.google.com/maps/search/?api=1&query=${currentMkr["geometry"]["coordinates"][0]},${currentMkr["geometry"]["coordinates"][1]}" target="_blank">[打開地圖]</a></li>
+<li><span class="fa-li"><i class="fas fa-map-marker-alt fa-fw"></i></span>${prop.chi_address} <a href="https://www.google.com/maps/search/?api=1&query=${currentMkr["geometry"]["coordinates"][0]},${currentMkr["geometry"]["coordinates"][1]}${(prop.place_id) ? `&query_place_id=${prop.place_id}` : ``}" target="_blank">[打開地圖]</a></li>
 <li><span class="fa-li"><i class="fas fa-phone fa-fw"></i></span>
 ${prop.tel1}${(prop.tel2) ? '/' + prop.tel2 : ''}${(prop.tel3) ? '/' + prop.tel3 : ''}
 </li>
