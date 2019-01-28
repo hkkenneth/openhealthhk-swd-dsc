@@ -92,18 +92,14 @@ a {
 }
 
 .navbar-brand {
-    height: 37px;
+    height: 17px;
     padding: 0;
     vertical-align: top;
 }
 
 .navbar-name {
-    height: 37px;
-    margin-left: 0.5em;
     display: inline-block;
     vertical-align: top;
-    font-size: 1.5rem;
-    line-height: 37px;
 }
 
 .navbar-brand .icon {
