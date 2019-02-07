@@ -45,7 +45,7 @@ a {
     height: calc(100vh - 88px);
 }
 
-#clinic-nav {
+#decc-nav {
     height: 50px;
 }
 
@@ -61,7 +61,7 @@ a {
 }
 
 
-#clinic-nav {
+#decc-nav {
     padding: .5rem 0 .5rem 1rem !important;
 }
 
@@ -150,7 +150,7 @@ a {
     border: none;
 }
 
-.clinic-card {
+.decc-card {
     position: fixed;
     /* background-color: #f6f6f6; */
     z-index: 5010;
@@ -162,7 +162,7 @@ a {
     border: none;
 }
 
-.clinic-card-body {
+.decc-card-body {
     overflow-y: auto;
     /* max-height: calc(100vh - 220px); */
     background-repeat: no-repeat;
@@ -188,7 +188,7 @@ a {
         margin-right: 0;
     }
 
-    .clinic-card {
+    .decc-card {
         bottom: 50px;
         height: 65%;
         left: 0;
@@ -258,7 +258,7 @@ a {
 }
 
 @media only screen and (min-width: 700px) {
-    .clinic-card {
+    .decc-card {
         min-width: 400px;
         max-height: 60%;
         top: 250px;

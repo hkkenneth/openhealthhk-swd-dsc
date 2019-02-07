@@ -12,7 +12,7 @@
   <!-- Make sure you put this AFTER Leaflet's CSS -->
   <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js" integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q=="
     crossorigin=""></script>
-  <script src="clinics.js"></script>
+  <script src="decc.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
     crossorigin="anonymous">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
@@ -77,14 +77,29 @@ overflow: hidden;
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title mx-auto" id="welcomeModal">Open Health HK</h5>
+            <h5 class="modal-title mx-auto" id="welcomeModal">長者地區中心地圖</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body text-center">
-            <p>醫院管理局2019 年度夜間、星期日及公眾假期普通科門診服務</p>
+            <p><span style="font-weight: 900">長者地區中心</span>是一種地區層面的長者社區支援服務，聯系地區上各服務單位，更有效地運用社區資源。</p>
             <p>&nbsp;</p>
+            <p>全港共有 41 個長者地區中心，部分中心有多於一個運作地點，這地圖列出各中心地點及聯絡方法。</p>
+            <p>&nbsp;</p>
+            <p>中心主要服務內容包括：地區上安老服務的聯繫及支援、個案管理、
+              外展及社區網絡工作、
+              長者支援服務隊、
+              發布社區資訊及轉介服務、
+              護老者支援服務、
+              飯堂膳食及洗衣服務、偶到服務等。</p>
+              <p>&nbsp;</p>
+              <p style="font-weight: 900">申請條件/資格:</p>
+              <p>年滿60歲或以上在區內居住的長者</p>
+              <p>護老者</p>
+              <p>社區人士</p>
+              <p>&nbsp;</p>
+              <p>圖示：</p>
             <ul class="list-unstyled list-inline">
               <!--<li class="list-inline-item"></li><img src="pin-247.png" class="inline_img">24小時開放</li>-->
               <li class="list-inline-item"></li><img src="pin-open.png" class="inline_img">開放中</li>
@@ -103,7 +118,7 @@ overflow: hidden;
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h6 class="modal-title" id="attributionModal">醫院管理局2019 年度夜間、星期日及公眾假期普通科門診地圖</h5>
+            <h6 class="modal-title" id="attributionModal">長者地區中心地圖</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -111,9 +126,9 @@ overflow: hidden;
           <div class="modal-body">
             <h5>資料來源</h5>
             <ul class="list-unstyled">
-              <li><a href="http://www.ha.org.hk/haho/ho/hesd/gopc2019holiday_chi.pdf" target="_blank">醫院管理局 （PDF檔案）</a></li>
+              <li><a href="https://www.swd.gov.hk/storage/asset/section/611/List_of_DECC_29.1.2019.xls" target="_blank">社會福利署 （XLS檔案）</a></li>
             </ul>
-            <p>最後更新日期：2018-12-14</p>
+            <p>最後更新日期：2019-01-29</p>
           </div>
         </div>
       </div>
@@ -125,7 +140,7 @@ overflow: hidden;
       <div class="modal-dialog nav_modal" role="document">
         <div class="modal-content nav_modal">
           <div class="modal-header">
-            <h5 class="modal-title" id="navModal">夜間、星期日及公眾假期門診</h5>
+            <h5 class="modal-title" id="navModal">長者地區中心</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -146,16 +161,15 @@ overflow: hidden;
               </li>
             </ul>
             <ul class="list-group list-group-flush">
-              <li class="list-group-item">
-                <!--<i class="fas fa-caret-right"></i>-->
-                <a class="list-group-item-action" href="#" onclick="showAllClinic();">夜間、星期日及公眾假期普通科門診</a>
+              <!--<li class="list-group-item">
+                <a class="list-group-item-action" href="#" onclick="showAllDecc();">夜間、星期日及公眾假期普通科門診</a>
               </li>
               <li class="list-group-item">
-                <a class="list-group-item-action" href="#" onclick="showPhClinic();">星期日及公眾假期普通科門診</a>
+                <a class="list-group-item-action" href="#" onclick="showPhDecc();">星期日及公眾假期普通科門診</a>
               </li>
               <li class="list-group-item">
-                <a class="list-group-item-action" href="#" onclick="showAvailableClinic();">只顯示現在開放診所</a>
-              </li>
+                <a class="list-group-item-action" href="#" onclick="showAvailableDecc();">只顯示現在開放診所</a>
+              </li>-->
               <li class="list-group-item">
                 <a class="list-group-item-action attribution" href="#" data-toggle="modal" data-target="#attributionModal">資料來源</a>
               </li>
@@ -166,13 +180,13 @@ overflow: hidden;
       </div>
     </div>
     <!-- First Navbar -->
-    <nav class="navbar navbar-light bg-light" id="clinic-nav">
+    <nav class="navbar navbar-light bg-light" id="decc-nav">
       <div class="nav-brand-cont">
         <span class="inapp-back-button d-none"></span>
         <!--<a class="navbar-brand" href="#">-->
         <div class="icon baseline">
         </div>
-        <span class="navbar-name">夜間、星期日及公眾假期普通科門診地圖</span>
+        <span class="navbar-name">長者地區中心地圖</span>
         </a>
       </div>
       <button class="navbar-toggler animated slideInRight faster" type="button" data-toggle="modal" data-target="#navModal"
@@ -197,7 +211,7 @@ overflow: hidden;
           <a class="dropdown-item" data-sub-district="wanchaicausewaybay" data-lat="22.274860" data-lng="114.181746">灣仔、銅鑼灣</a>
           <!--<a class="dropdown-item" data-sub-district="central" data-lat="22.281300" data-lng="114.155863">中環</a>-->
           <a class="dropdown-item" data-sub-district="saiwan" data-lat="22.284786" data-lng="114.137310">西環</a>
-          <!--<a class="dropdown-item" data-sub-district="northpoint" data-lat="22.286839" data-lng="114.195207">北角</a>-->
+          <a class="dropdown-item" data-sub-district="northpoint" data-lat="22.286839" data-lng="114.195207">北角</a>
           <a class="dropdown-item" data-sub-district="saiwanho" data-lat="22.282951" data-lng="114.221201">西灣河</a>
         </div>
       </li>
@@ -209,7 +223,7 @@ overflow: hidden;
         </button>
         <div class="dropdown-menu">
           <a class="dropdown-item" data-sub-district="mongkok" data-lat="22.31326" data-lng="114.16932">油尖旺</a>
-          <!--<a class="dropdown-item" data-sub-district="kowlooncity" data-lat="22.315782" data-lng="114.187887">九龍城</a>-->
+          <a class="dropdown-item" data-sub-district="kowlooncity" data-lat="22.315782" data-lng="114.187887">九龍城</a>
           <a class="dropdown-item" data-sub-district="kwuntong" data-lat="22.313683" data-lng="114.221671">觀塘</a>
           <a class="dropdown-item" data-sub-district="shamshuipoprinceedward" data-lat="22.329168" data-lng="114.163337">深水埗、太子</a>
         </div>
@@ -227,25 +241,25 @@ overflow: hidden;
           <a class="dropdown-item" data-sub-district="northdistrict" data-lat="22.502254" data-lng="114.135678">北區</a>
           <a class="dropdown-item" data-sub-district="taipo" data-lat="22.451605" data-lng="114.164757">大埔</a>
           <a class="dropdown-item" data-sub-district="shatin" data-lat="22.379762" data-lng="114.182577">沙田</a>
-          <!--<a class="dropdown-item" data-sub-district="saikung" data-lat="22.383511" data-lng="114.271238">西貢</a>-->
+          <a class="dropdown-item" data-sub-district="saikung" data-lat="22.383511" data-lng="114.271238">西貢</a>
           <a class="dropdown-item" data-sub-district="tseungkwano" data-lat="22.314464" data-lng="114.262384">將軍澳</a>
         </div>
     </ul>
     <div id='mapid'></div>
-    <div class="card clinic-card card--hidden"></div>
+    <div class="card decc-card card--hidden"></div>
     <script>
       // Global Variable
       var DateTime = luxon.DateTime;
-      var clinicMap;
-      var clinicLayer;
-      var phClinicLayer;
-      var availableClinicLayer;
+      var deccMap;
+      var deccLayer;
+      var phDeccLayer;
+      var availableDeccLayer;
       var currentLayer;
       var entrySource;
       var initialID = 0;
       var currentID = 1;
       var currentMkr = {};
-      var card = document.querySelector('.clinic-card');
+      var card = document.querySelector('.decc-card');
       var defaultSizeIcon = L.Icon.extend({
         options: {
           iconSize: [30, 30]
@@ -280,13 +294,13 @@ overflow: hidden;
       zoomendHandler();
       function initMap() {
         welcome();
-        clinics.features.forEach(feature => {
+        deccs.features.forEach(feature => {
           // calculate status based on current time
           feature.properties.status = calcBranchstatus(feature);
         });
 
         // Create the map
-        clinicMap = L.map('mapid', {
+        deccMap = L.map('mapid', {
           center: (screen.width >= 768) ? [22.366538, 114.174007] : [22.366538, 114.174007],
           zoom: (screen.width >= 768) ? 11 : 10,
           zoomSnap: 0.25,
@@ -302,10 +316,10 @@ overflow: hidden;
         L.tileLayer('https://b.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           maxZoom: 18,
           minZoom: 10
-        }).addTo(clinicMap);
+        }).addTo(deccMap);
 
         // Load the data from json
-        clinicLayer = L.geoJSON(clinics, {
+        deccLayer = L.geoJSON(deccs, {
           onEachFeature: onEachFeature,
           pointToLayer: function (feature, latlng) {
             let options = {};
@@ -322,56 +336,9 @@ overflow: hidden;
             }
             return L.marker(latlng, options);
           } // End point to layer
-        }).addTo(clinicMap);
+        }).addTo(deccMap);
 
-        currentLayer = clinicLayer;
-
-        phClinicLayer = L.geoJSON(clinics, {
-          onEachFeature: onEachFeature,
-          pointToLayer: function (feature, latlng) {
-            let options = {};
-            switch (feature["properties"]["status"]) {
-              case 'always_available':
-                options.icon = red;
-                break;
-              case 'available':
-                options.icon = green; // open
-                break;
-              case 'closed':
-                options.icon = grey;
-                break;
-            }
-            if (feature["properties"]["hasSunday"]) {
-              return L.marker(latlng, options);
-            } else {
-              return null;
-            }
-          } // end of pointToLayer);
-        });
-
-        availableClinicLayer = L.geoJSON(clinics, {
-          onEachFeature: onEachFeature,
-          pointToLayer: function (feature, latlng) {
-            let options = {};
-            switch (feature["properties"]["status"]) {
-              case 'always_available':
-                options.icon = red;
-                break;
-              case 'available':
-                options.icon = green; // open
-                break;
-              case 'closed':
-                options.icon = grey;
-                break;
-            }
-            if (feature["properties"]["status"] === "available") {
-              return L.marker(latlng, options);
-            } else {
-              return null;
-            }
-          } // end of pointToLayer);
-        });
-
+        currentLayer = deccLayer;
         // Add the zoom / locate control
         L.control.locate({
           collapsed: false,
@@ -379,14 +346,14 @@ overflow: hidden;
           setView: false,
           flyTo: true,
           showPopup: false
-        }).addTo(clinicMap);
+        }).addTo(deccMap);
 
         // Calculate distance
         function calDistance(loca_info) {
           var options = {
             units: 'kilometers'
           };
-          clinics.features.forEach(function (f) {
+          deccs.features.forEach(function (f) {
             Object.defineProperty(f.properties, 'distance', {
               value: turf.distance(loca_info, f.geometry, options),
               writable: true,
@@ -394,7 +361,7 @@ overflow: hidden;
               configurable: true
             });
           })
-          clinics.features.sort(function (a, b) {
+          deccs.features.sort(function (a, b) {
             if (a.properties.distance > b.properties.distance) {
               return 1;
             }
@@ -407,26 +374,26 @@ overflow: hidden;
         };  //end of calDistance
 
         // locationfound Event handler
-        clinicMap.once('locationfound', function (e) {
+        deccMap.once('locationfound', function (e) {
           var glatlng = [e.latlng.lng, e.latlng.lat];
           calDistance(glatlng);
-          var line = turf.lineString([clinics.features[3].geometry.coordinates, glatlng]); // Closest 3 features
+          var line = turf.lineString([deccs.features[3].geometry.coordinates, glatlng]); // Closest 3 features
           var bbox = turf.bbox(line);
           temp_bound = [
             [bbox[1], bbox[0]],
             [bbox[3], bbox[2]]
           ];
-          clinicMap.fitBounds(temp_bound, {
+          deccMap.fitBounds(temp_bound, {
             padding: [80, 80]
           });
         });
         // End of locationfound event handler
 
-        clinicMap.on('zoomend', zoomendHandler);
+        deccMap.on('zoomend', zoomendHandler);
         // End of zoomend event handler
 
         // Add popCard event handler to features
-        var card = document.querySelector('.clinic-card');
+        var card = document.querySelector('.decc-card');
         function onEachFeature(feature, layer) {
           layer.on({
             click: popCard
@@ -441,7 +408,7 @@ overflow: hidden;
           let date = new Date();
           let weekDay = date.getDay();
           let hourUTC = date.getUTCHours();
-          let gmt = 8; // Clinic opening hours are based on Hong Kong Time
+          let gmt = 8; // Decc opening hours are based on Hong Kong Time
           let hour = (hourUTC + gmt > 23) ? hourUTC + gmt - 24 : hourUTC + gmt;
           let time = hour * 100 + date.getMinutes();
           let periods = feature.properties["opening_hours"];
@@ -462,19 +429,19 @@ overflow: hidden;
         };
 
 
-        // Focus on a clinic, pop the info card
+        // Focus on a decc, pop the info card
         function popCard(e) {
           currentMkr = e.target.feature;
           let stateObj = {
             id: currentID
           };
-          window.history.pushState(stateObj, "", `#${entrySource}&clinicid=${currentMkr.properties.id}`);
+          window.history.pushState(stateObj, "", `#${entrySource}&deccid=${currentMkr.properties.id}`);
           let prop = currentMkr["properties"];
           //offset the centre
-          bounds = clinicMap.getBounds();
+          bounds = deccMap.getBounds();
           lat_bounds = bounds._northEast.lat - bounds._southWest.lat;
           let centre = currentMkr.geometry.coordinates //.reverse();
-          clinicMap.panTo([centre[1] - lat_bounds * 0.3, centre[0]]);
+          deccMap.panTo([centre[1] - lat_bounds * 0.3, centre[0]]);
           card.innerHTML =
             `
 <div class="card-header">
@@ -485,7 +452,7 @@ overflow: hidden;
 </span>
 <h5 class="card-title">${prop.chi_name}</h5>
 </div>
-<div class="clinic-card-body">
+<div class="decc-card-body">
 <button type="button" class="close" id="close-card" data-dismiss="modal" aria-label="Close">
 <span aria-hidden="true">&times;</span>
 </button>
@@ -571,7 +538,7 @@ ${(prop.weekday_text) ? `<ul class="collapse" id="opening_hours">${prop.weekday_
 
         // welcome
         function welcome() {
-          return; // not more welcome
+          
           // if (initialID == 0) {
           var myModal = document.getElementById('welcomeModal');
           var options = {
@@ -596,7 +563,7 @@ ${(prop.weekday_text) ? `<ul class="collapse" id="opening_hours">${prop.weekday_
         var subDistrictBtns = document.querySelectorAll('a[data-sub-district]');
         subDistrictBtns.forEach(s => {
           s.addEventListener('click', (event) => {
-            clinicMap.setView([s.getAttribute("data-lat"), s.getAttribute("data-lng")], 15);
+            deccMap.setView([s.getAttribute("data-lat"), s.getAttribute("data-lng")], 15);
             event.stopPropagation();
             let stateObj = {
               subdistrict: s.getAttribute("data-sub-district")
@@ -610,7 +577,7 @@ ${(prop.weekday_text) ? `<ul class="collapse" id="opening_hours">${prop.weekday_
         // End of setting event listener
 
         // sideMenubutton events
-        var sideMenubutton = document.querySelectorAll('#clinic-nav .navbar-toggler');
+        var sideMenubutton = document.querySelectorAll('#decc-nav .navbar-toggler');
         sideMenubutton.forEach(s => {
           s.addEventListener('click', (event) => {
           });
@@ -654,7 +621,7 @@ ${(prop.weekday_text) ? `<ul class="collapse" id="opening_hours">${prop.weekday_
       }
       // zoomend event handler
       function zoomendHandler() {
-        var currentZoom = clinicMap.getZoom();
+        var currentZoom = deccMap.getZoom();
         if (currentZoom >= 11.5 && currentZoom < 14) {
           red = new defaultSizeIcon({
             iconUrl: 'pin-247.png'
@@ -711,33 +678,6 @@ ${(prop.weekday_text) ? `<ul class="collapse" id="opening_hours">${prop.weekday_
           }
           mkr.setIcon(icon);  // Update icon
         });
-      }
-
-      function showAllClinic() {
-        if (currentLayer != clinicLayer) {
-          clinicMap.removeLayer(currentLayer);
-          clinicMap.addLayer(clinicLayer);
-          currentLayer = clinicLayer;
-          zoomendHandler();
-        }
-      }
-
-      function showPhClinic() {
-        if (currentLayer != phClinicLayer) {
-          clinicMap.removeLayer(currentLayer);
-          clinicMap.addLayer(phClinicLayer);
-          currentLayer = phClinicLayer;
-          zoomendHandler();
-        }
-      }
-
-      function showAvailableClinic() {
-        if (currentLayer != availableClinicLayer) {
-          clinicMap.removeLayer(currentLayer);
-          clinicMap.addLayer(availableClinicLayer);
-          currentLayer = availableClinicLayer;
-          zoomendHandler();
-        }
       }
     </script>
   </main>
