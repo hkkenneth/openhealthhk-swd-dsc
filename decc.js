@@ -206,7 +206,7 @@ var deccs = {
                 "website": "https://www.swd.gov.hk/storage/asset/section/611/List_of_DECC_29.1.2019.xls",
                 "fb_page": "",
                 "remarks": "",
-                "place_id": "EjzlnLDkuIs0LTblrqQsIEphZGV2aWV3IENvdXJ0LCAzOCBIaWxsIFJkLCBTYWkgV2FuLCBIb25nIEtvbmciKBomChYKFAoSCfMgYmCE_wM0EdZlx4p4ECWFEgzlnLDkuIs0LTblrqQ",
+                "place_id": "ChIJ8yBiYIT_AzQR1mXHingQJYU",
                 "opening_hours": [
                     {
                         "close": {
@@ -966,7 +966,7 @@ var deccs = {
                 "website": "https://www.swd.gov.hk/storage/asset/section/611/List_of_DECC_29.1.2019.xls",
                 "fb_page": "",
                 "remarks": "",
-                "place_id": "El3mqJPlj4rkuInmqJMsIFN0LiBKYW1lcycgU2V0dGxlbWVudCBDb21tdW5pdHkgQ2VudHJlLCA4NSBTdG9uZSBOdWxsYWggTG4sIFdhbiBDaGFpLCBIb25nIEtvbmciKBomChYKFAoSCX8eHGBDAAQ0ESwxwaguH3GSEgzmqJPlj4rkuInmqJM",
+                "place_id": "ChIJ_5kgYEMABDQRLJjLyzpn0sw",
                 "opening_hours": [
                     {
                         "close": {
@@ -1156,7 +1156,7 @@ var deccs = {
                 "website": "https://www.swd.gov.hk/storage/asset/section/611/List_of_DECC_29.1.2019.xls",
                 "fb_page": "",
                 "remarks": "",
-                "place_id": "EjHkuozmqJMsIDE4MCBBYmVyZGVlbiBNYWluIFJkLCBBYmVyZGVlbiwgSG9uZyBLb25nIiIaIAoWChQKEgkRJhutHAAENBGCcQywutMKeBIG5LqM5qiT",
+                "place_id": "ChIJaZ_nqBwABDQR0gpH40mTq6o",
                 "opening_hours": [
                     {
                         "close": {
@@ -2866,7 +2866,7 @@ var deccs = {
                 "website": "https://www.swd.gov.hk/storage/asset/section/611/List_of_DECC_29.1.2019.xls",
                 "fb_page": "",
                 "remarks": "",
-                "place_id": "ChIJIamKEXUEBDQRD5tS6J1IFks",
+                "place_id": "ChIJnSNqEHUEBDQRoflR90goXpU",
                 "opening_hours": [
                     {
                         "close": {
@@ -2961,7 +2961,7 @@ var deccs = {
                 "website": "https://www.swd.gov.hk/storage/asset/section/611/List_of_DECC_29.1.2019.xls",
                 "fb_page": "",
                 "remarks": "",
-                "place_id": "Eo8B5Zyw5LiLKOmDqOS7vSnlj4osIFRoZSBIb2x5IENhcnBlbnRlciBDaHVyY2ggQW5kIERpc3RyaWN0IEVsZGVybHkgQ29tbXVuaXR5IENlbnRyZSAoSG9seSBDYXJwZW50ZXIgR3Vlc3QgSG91c2UpLCAxIER5ZXIgQXZlLCBUYWkgV2FuLCBIb25nIEtvbmciLRorChYKFAoSCS2vOjjeAAQ0EY7Kzz_DCqtrEhHlnLDkuIso6YOo5Lu9KeWPig",
+                "place_id": "ChIJtaY6ON4ABDQRDcuUI4qV1jQ",
                 "opening_hours": [
                     {
                         "close": {
@@ -3056,7 +3056,7 @@ var deccs = {
                 "website": "https://www.swd.gov.hk/storage/asset/section/611/List_of_DECC_29.1.2019.xls",
                 "fb_page": "",
                 "remarks": "",
-                "place_id": "ChIJ6VLjmtkABDQR8knjKZ6SurY",
+                "place_id": "ChIJSUZgmtkABDQRjNfcnS4_Y8o",
                 "opening_hours": [
                     {
                         "close": {
@@ -3721,7 +3721,7 @@ var deccs = {
                 "website": "https://www.swd.gov.hk/storage/asset/section/611/List_of_DECC_29.1.2019.xls",
                 "fb_page": "",
                 "remarks": "",
-                "place_id": "EikzLCAxMSBXaW5nIFNpbmcgTG4sIFlhdSBNYSBUZWksIEhvbmcgS29uZyIdGhsKFgoUChIJW4pqpsEABDQRWKLa6rjw7TESATM",
+                "place_id": "ChIJieh0psEABDQRbgweRSw2B7M",
                 "opening_hours": [
                     {
                         "close": {
@@ -3911,7 +3911,7 @@ var deccs = {
                 "website": "https://www.swd.gov.hk/storage/asset/section/611/List_of_DECC_29.1.2019.xls",
                 "fb_page": "",
                 "remarks": "",
-                "place_id": "EjjlnLDkuIvlj4rkuIDmqJMsIDQ1IEZ1ayBUc3VuIFN0LCBUYWkgS29rIFRzdWksIEhvbmcgS29uZyIrGikKFgoUChIJlQyaZrcABDQR0JzWvoo1_48SD-WcsOS4i-WPiuS4gOaokw",
+                "place_id": "ChIJV5GIZrcABDQR0VlYhq7YIGg",
                 "opening_hours": [
                     {
                         "close": {
