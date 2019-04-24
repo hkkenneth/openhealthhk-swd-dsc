@@ -557,7 +557,8 @@ ${(prop.weekday_text) ? `<ul class="collapse" id="opening_hours">${prop.weekday_
         var subDistrictBtns = document.querySelectorAll('a[data-sub-district]');
         subDistrictBtns.forEach(s => {
           s.addEventListener('click', (event) => {
-            deccMap.setView([s.getAttribute("data-lat"), s.getAttribute("data-lng")], 15);
+            // Changed view level from 15 to 14 , hopefully show more of the district
+            deccMap.setView([s.getAttribute("data-lat"), s.getAttribute("data-lng")], 14);
             event.stopPropagation();
             let stateObj = {
               subdistrict: s.getAttribute("data-sub-district")
