@@ -174,7 +174,7 @@ overflow: hidden;
         <!--<a class="navbar-brand" href="#">-->
         <div class="icon baseline">
         </div>
-        <span class="navbar-name" style="font-weight: 900">長者地區中心地圖</span>
+        <span class="navbar-name" style="font-weight: 900">長者地區中心地圖</span><span id="selection-label"></span>
         </a>
       </div>
       <!-- Disable button <button class="navbar-toggler animated slideInRight faster" type="button" data-toggle="modal" data-target="#navModal"
@@ -562,6 +562,9 @@ ${(prop.weekday_text) ? `<ul class="collapse" id="opening_hours">${prop.weekday_
             // Close opened card when changing district
             card.classList.remove('card--expanded');
             card.classList.add("card--hidden");
+
+            // Update label to show currently selected district
+            document.getElementById("selection-label").innerHTML = " > 已選擇：" + s.innerHTML;
 
             event.stopPropagation();
             let stateObj = {
