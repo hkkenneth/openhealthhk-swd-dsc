@@ -478,6 +478,12 @@ ${(prop.weekday_text) ? `<ul class="collapse" id="opening_hours">${prop.weekday_
           closeCard.addEventListener('click', (event) => {
             card.classList.remove('card--expanded');
             card.classList.add("card--hidden");
+            // Remove the selected DECC id from URL
+            let stateObj = {
+              id: "-1"
+            };
+            window.history.pushState(stateObj, "", "#");
+
             event.stopPropagation();
             document.querySelectorAll('.card-footer').forEach(s => {
               s.remove();
