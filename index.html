@@ -559,12 +559,18 @@ ${(prop.weekday_text) ? `<ul class="collapse" id="opening_hours">${prop.weekday_
           s.addEventListener('click', (event) => {
             // Changed view level from 15 to 14 , hopefully show more of the district
             deccMap.setView([s.getAttribute("data-lat"), s.getAttribute("data-lng")], 14);
+            // Close opened card when changing district
+            card.classList.remove('card--expanded');
+            card.classList.add("card--hidden");
+
             event.stopPropagation();
             let stateObj = {
               subdistrict: s.getAttribute("data-sub-district")
             };
+            // Update the URL
             window.history.pushState(stateObj, "",
               `#subdistrict=${s.getAttribute("data-sub-district")}`);
+            // Hide the nav bar
             s.parentNode.classList.remove('show');
             s.parentNode.parentNode.classList.remove('show');
           })
