@@ -455,7 +455,10 @@ overflow: hidden;
 <li><span class="fa-li"><i class="fas fa-map-marker-alt fa-fw"></i></span><span id="cal_distance"></span></li>
 <li><span class="fa-li"><i class="fas fa-map-marker-alt fa-fw"></i></span>${prop.chi_address} <a href="https://www.google.com/maps/search/?api=1&query=${currentMkr["geometry"]["coordinates"][0]},${currentMkr["geometry"]["coordinates"][1]}${(prop.place_id) ? `&query_place_id=${prop.place_id}` : ``}" target="_blank">[打開地圖]</a></li>
 <li><span class="fa-li"><i class="fas fa-phone fa-fw"></i></span>
-${prop.tel1}${(prop.tel2) ? '/' + prop.tel2 : ''}${(prop.tel3) ? '/' + prop.tel3 : ''}
+電話號碼：<a href="tel:${prop.tel1.replace(/ /g,'')}">${prop.tel1}</a>
+</li>
+<li><span class="fa-li"><i class="fas fa-phone fa-fw"></i></span>
+傳真號碼：${prop.tel2}
 </li>
 ${(false && prop.website) ? `<li><span class="fa-li"><i class="fas fa-link fa-fw"></i></span><a data-link-type="website" class="external_link" href="${prop.website}" target="_blank">網站</a></li>` : ''}
 ${(prop.fb_page) ? `<li><span class="fa-li"><i class="fab fa-facebook fa-fw"></i></span><a data-link-type="facebook" class="external_link" href="${prop.fb_page}" target="_blank">Facebook</a></li>` : ''}
