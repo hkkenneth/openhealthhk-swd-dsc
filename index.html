@@ -249,7 +249,6 @@ overflow: hidden;
       var phDeccLayer;
       var availableDeccLayer;
       var currentLayer;
-      var entrySource;
       var initialID = 0;
       var currentID = 1;
       var currentMkr = {};
@@ -425,11 +424,14 @@ overflow: hidden;
 
         // Focus on a decc, pop the info card
         function popCard(e) {
-          currentMkr = e.target.feature;
+          popCardByCurrentMarker(e.target.feature);
+        }
+
+        function popCardByCurrentFeature(currentMkr) {
           let stateObj = {
             id: currentID
           };
-          window.history.pushState(stateObj, "", `#${entrySource}&deccid=${currentMkr.properties.id}`);
+          window.history.pushState(stateObj, "", `#deccid=${currentMkr.properties.id}`);
           let prop = currentMkr["properties"];
           //offset the centre
           bounds = deccMap.getBounds();
@@ -550,8 +552,18 @@ ${(prop.weekday_text) ? `<ul class="collapse" id="opening_hours">${prop.weekday_
           document.querySelector('#welcomeModal .btn').addEventListener('click', function () {
             close_method = 'button';
           });
-          myModal.addEventListener('hide.bs.modal', function (event) {
-
+          myModal.addEventListener('hidden.bs.modal', function (event) {
+            if (location.hash.indexOf('#deccid=') < 0) {
+              return;
+            }
+            if (currentLayer) {
+              currentLayer.eachLayer(mkr => {
+                if (mkr.feature && mkr.feature.properties &&
+                    mkr.feature.properties.id == location.hash.substr(8)) {
+                  popCardByCurrentFeature(mkr.feature);
+                }
+              });
+            }
           }, false);
         };
         // End of welcome()
