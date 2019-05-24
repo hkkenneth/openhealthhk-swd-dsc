@@ -453,7 +453,7 @@ overflow: hidden;
 <div class="card-text">
 <ul class="fa-ul" id="branchDetail">
 <li><span class="fa-li"><i class="fas fa-map-marker-alt fa-fw"></i></span><span id="cal_distance"></span></li>
-<li><span class="fa-li"><i class="fas fa-map-marker-alt fa-fw"></i></span>${prop.Address} <a href="${prop.LocGoogleUrl}" target="_blank">[打開地圖]</a></li>
+<li><span class="fa-li"><i class="fas fa-map-marker-alt fa-fw"></i></span>${prop.Address} <a href="${prop.LocGoogleUrl}" target="_blank">[打開Google地圖]</a></li>
 <li><span class="fa-li"><i class="fas fa-phone fa-fw"></i></span>
 電話號碼：${prop.Telephone.map(function(tel, i){  return `<a href="tel:${tel.replace(/ /g,'')}">${tel}</a>`; }).join(', ')}
 </li>
