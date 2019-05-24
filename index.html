@@ -12,7 +12,7 @@
   <!-- Make sure you put this AFTER Leaflet's CSS -->
   <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js" integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q=="
     crossorigin=""></script>
-  <script src="decc.js"></script>
+  <script src="dsc.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
     crossorigin="anonymous">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
@@ -84,13 +84,13 @@ overflow: hidden;
           </div>
           <div class="modal-body text-center">
             <p><span style="font-weight: 900">殘疾人士地區支援中心</span>採取以地區為本的策略，為居住在社區中的殘疾人士、其家人和照顧者提供一站式服務和支援。</p>
-            <p>&nbsp;</p>
+            <!--<p>&nbsp;</p>
               <p>&nbsp;</p>
               <p>圖示：</p>
             <ul class="list-unstyled list-inline">
-              <!--<li class="list-inline-item"></li><img src="pin-247.png" class="inline_img">24小時開放</li>-->
+              <li class="list-inline-item"></li><img src="pin-247.png" class="inline_img">24小時開放</li>
               <li class="list-inline-item"></li><img src="pin-open.png" class="inline_img">開放中</li>
-              <li class="list-inline-item"></li><img src="pin-close.png" class="inline_img">休息</li>
+              <li class="list-inline-item"></li><img src="pin-close.png" class="inline_img">休息</li>-->
             </ul>
           </div>
           <div class="modal-footer">
@@ -167,7 +167,7 @@ overflow: hidden;
       </div>
     </div>
     <!-- First Navbar -->
-    <nav class="navbar navbar-light bg-light" id="decc-nav">
+    <nav class="navbar navbar-light bg-light" id="dsc-nav">
       <div class="nav-brand-cont">
         <span class="inapp-back-button d-none"></span>
         <!--<a class="navbar-brand" href="#">-->
@@ -239,19 +239,17 @@ overflow: hidden;
         </div>
     </ul>
     <div id='mapid'></div>
-    <div class="card decc-card card--hidden"></div>
+    <div class="card dsc-card card--hidden"></div>
     <script>
       // Global Variable
       var DateTime = luxon.DateTime;
-      var deccMap;
-      var deccLayer;
-      var phDeccLayer;
-      var availableDeccLayer;
+      var dscMap;
+      var dscLayer;
       var currentLayer;
       var initialID = 0;
       var currentID = 1;
       var currentMkr = {};
-      var card = document.querySelector('.decc-card');
+      var card = document.querySelector('.dsc-card');
       var defaultSizeIcon = L.Icon.extend({
         options: {
           iconSize: [30, 30]
@@ -286,13 +284,14 @@ overflow: hidden;
       zoomendHandler();
       function initMap() {
         welcome();
-        deccs.features.forEach(feature => {
+        /* Nothing to calculate
+        dscs.features.forEach(feature => {
           // calculate status based on current time
           feature.properties.status = calcBranchstatus(feature);
-        });
+        });*/
 
         // Create the map
-        deccMap = L.map('mapid', {
+        dscMap = L.map('mapid', {
           center: (screen.width >= 768) ? [22.366538, 114.174007] : [22.366538, 114.174007],
           zoom: (screen.width >= 768) ? 11 : 10,
           zoomSnap: 0.25,
@@ -308,14 +307,14 @@ overflow: hidden;
         L.tileLayer('https://tile-a.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
           maxZoom: 18,
           minZoom: 10
-        }).addTo(deccMap);
+        }).addTo(dscMap);
 
         // Load the data from json
-        deccLayer = L.geoJSON(deccs, {
+        dscLayer = L.geoJSON(dscs, {
           onEachFeature: onEachFeature,
           pointToLayer: function (feature, latlng) {
             let options = {};
-            switch (feature["properties"]["status"]) {
+            /*switch (feature["properties"]["status"]) {
               case 'always_available':
                 options.icon = red;
                 break;
@@ -325,12 +324,13 @@ overflow: hidden;
               case 'closed':
                 options.icon = grey;
                 break;
-            }
+            }*/
+            options.icon = green;
             return L.marker(latlng, options);
           } // End point to layer
-        }).addTo(deccMap);
+        }).addTo(dscMap);
 
-        currentLayer = deccLayer;
+        currentLayer = dscLayer;
         // Add the zoom / locate control
         L.control.locate({
           collapsed: false,
@@ -338,14 +338,14 @@ overflow: hidden;
           setView: false,
           flyTo: true,
           showPopup: false
-        }).addTo(deccMap);
+        }).addTo(dscMap);
 
         // Calculate distance
         function calDistance(loca_info) {
           var options = {
             units: 'kilometers'
           };
-          deccs.features.forEach(function (f) {
+          dscs.features.forEach(function (f) {
             Object.defineProperty(f.properties, 'distance', {
               value: turf.distance(loca_info, f.geometry, options),
               writable: true,
@@ -353,7 +353,7 @@ overflow: hidden;
               configurable: true
             });
           })
-          deccs.features.sort(function (a, b) {
+          dscs.features.sort(function (a, b) {
             if (a.properties.distance > b.properties.distance) {
               return 1;
             }
@@ -366,26 +366,26 @@ overflow: hidden;
         };  //end of calDistance
 
         // locationfound Event handler
-        deccMap.once('locationfound', function (e) {
+        dscMap.once('locationfound', function (e) {
           var glatlng = [e.latlng.lng, e.latlng.lat];
           calDistance(glatlng);
-          var line = turf.lineString([deccs.features[3].geometry.coordinates, glatlng]); // Closest 3 features
+          var line = turf.lineString([dscs.features[3].geometry.coordinates, glatlng]); // Closest 3 features
           var bbox = turf.bbox(line);
           temp_bound = [
             [bbox[1], bbox[0]],
             [bbox[3], bbox[2]]
           ];
-          deccMap.fitBounds(temp_bound, {
+          dscMap.fitBounds(temp_bound, {
             padding: [80, 80]
           });
         });
         // End of locationfound event handler
 
-        deccMap.on('zoomend', zoomendHandler);
+        dscMap.on('zoomend', zoomendHandler);
         // End of zoomend event handler
 
         // Add popCard event handler to features
-        var card = document.querySelector('.decc-card');
+        var card = document.querySelector('.dsc-card');
         function onEachFeature(feature, layer) {
           layer.on({
             click: popCard
@@ -394,13 +394,13 @@ overflow: hidden;
 
 
         /* Calculate the status by opening_hours */
-        function calcBranchstatus(feature) {
+        /*function calcBranchstatus(feature) {
           // Return if no information
           if (feature.properties["opening_hours"] == "") return "available";
           let date = new Date();
           let weekDay = date.getDay();
           let hourUTC = date.getUTCHours();
-          let gmt = 8; // Decc opening hours are based on Hong Kong Time
+          let gmt = 8; // opening hours are based on Hong Kong Time
           let hour = (hourUTC + gmt > 23) ? hourUTC + gmt - 24 : hourUTC + gmt;
           let time = hour * 100 + date.getMinutes();
           let periods = feature.properties["opening_hours"];
@@ -418,57 +418,55 @@ overflow: hidden;
             }
           });
           return filValue;
-        };
+        };*/
 
 
-        // Focus on a decc, pop the info card
+        // Focus on a dsc, pop the info card
         function popCard(e) {
+          console.log('popCard');
           popCardByCurrentFeature(e.target.feature);
         }
 
         function popCardByCurrentFeature(currentMkr) {
+          console.log('popCard');
           let stateObj = {
             id: currentID
           };
-          window.history.pushState(stateObj, "", `#deccid=${currentMkr.properties.id}`);
+          window.history.pushState(stateObj, "", `#dscid=${currentMkr.properties.UniqueId}`);
           let prop = currentMkr["properties"];
           //offset the centre
-          bounds = deccMap.getBounds();
+          bounds = dscMap.getBounds();
           lat_bounds = bounds._northEast.lat - bounds._southWest.lat;
           let centre = currentMkr.geometry.coordinates //.reverse();
-          deccMap.panTo([centre[1] - lat_bounds * 0.3, centre[0]]);
+          dscMap.panTo([centre[1] - lat_bounds * 0.3, centre[0]]);
           card.innerHTML =
             `
 <div class="card-header">
-<h6 id="branchStatus" class="${prop.status}">${
-            (prop.status == "always_available") ? "24小時開放" : (prop.status == "available") ? " 開放中" : "休息"
-            }</h6>
 <span class="head_box">
 </span>
-<h5 class="card-title">${prop.chi_name}</h5>
+<h5 class="card-title">${prop.LocName}</h5>
 </div>
-<div class="decc-card-body">
+<div class="dsc-card-body">
 <button type="button" class="close" id="close-card" data-dismiss="modal" aria-label="Close">
 <span aria-hidden="true">&times;</span>
 </button>
 <div class="card-text">
 <ul class="fa-ul" id="branchDetail">
 <li><span class="fa-li"><i class="fas fa-map-marker-alt fa-fw"></i></span><span id="cal_distance"></span></li>
-<li><span class="fa-li"><i class="fas fa-map-marker-alt fa-fw"></i></span>${prop.chi_address} <a href="https://www.google.com/maps/search/?api=1&query=${currentMkr["geometry"]["coordinates"][0]},${currentMkr["geometry"]["coordinates"][1]}${(prop.place_id) ? `&query_place_id=${prop.place_id}` : ``}" target="_blank">[打開地圖]</a></li>
+<li><span class="fa-li"><i class="fas fa-map-marker-alt fa-fw"></i></span>${prop.Address} <a href="${prop.LocGoogleUrl}" target="_blank">[打開地圖]</a></li>
 <li><span class="fa-li"><i class="fas fa-phone fa-fw"></i></span>
-電話號碼：<a href="tel:${prop.tel1.replace(/ /g,'')}">${prop.tel1}</a>
+電話號碼：${prop.Telephone.map(function(tel, i){  return `<a href="tel:${tel.replace(/ /g,'')}">${tel}</a>`; }).join(', ')}
 </li>
 <li><span class="fa-li"><i class="fas fa-phone fa-fw"></i></span>
-傳真號碼：${prop.tel2}
+傳真號碼：${prop.Fax.map(function(fax, i){  return `${fax}`; }).join(', ')}
 </li>
-${(false && prop.website) ? `<li><span class="fa-li"><i class="fas fa-link fa-fw"></i></span><a data-link-type="website" class="external_link" href="${prop.website}" target="_blank">網站</a></li>` : ''}
-${(prop.fb_page) ? `<li><span class="fa-li"><i class="fab fa-facebook fa-fw"></i></span><a data-link-type="facebook" class="external_link" href="${prop.fb_page}" target="_blank">Facebook</a></li>` : ''}
-${(prop.opening_hours) ? `<li id="opening_hour_title"><span class="fa-li"><i class="fas fa-clock fa-fw"></i></span><a data-toggle="collapse" href="#opening_hours" role="button" aria-expanded="false" aria-controls="collapseExample">開放時間</a></li>` : ''}
+${(prop.websiteCount > 0) ? `<li><span class="fa-li"><i class="fas fa-link fa-fw"></i></span>` : ''}
+${(prop.websiteCount > 0) ? prop.Website.map(function(website, i) { return `<a data-link-type="website" class="external_link" href="${website}" target="_blank">網站${(i > 0) ? (i+1) : ''}</a></li>`;}).join('') : ''}
+${(prop.HoursText.length > 0) ? `<li id="opening_hour_title"><span class="fa-li"><i class="fas fa-clock fa-fw"></i></span>開放時間</li>` : ''}
+${(prop.HoursText.length > 0) ? `<li id="opening_hours">${prop.HoursText.replace(/\n/g, '<br />')}</li>` : ''}
 </ul>
-${(prop.weekday_text) ? `<ul class="collapse" id="opening_hours">${prop.weekday_text.map(
-              day => `<li>${day}</li>`.trim()).join('')}</ul>` : ''}
 <p id="remarks"></p>
-<a data-link-type="report" class="external_link" href="https://docs.google.com/forms/d/e/1FAIpQLSfICG2QsywDoxybtm6n2E_3zN2SPFg4J1HDbLB4EkZ8A4frCw/viewform?usp=pp_url&entry.1604560975=${prop.chi_name}&entry.1154394137=${prop.chi_address}" target="_blank">報料改善資料</a>
+<a data-link-type="report" class="external_link" href="https://docs.google.com/forms/d/e/1FAIpQLSfICG2QsywDoxybtm6n2E_3zN2SPFg4J1HDbLB4EkZ8A4frCw/viewform?usp=pp_url&entry.1604560975=${prop.LocName}&entry.1154394137=${prop.Address}" target="_blank">報料改善資料</a>
 </div>
 </div>
 `;
@@ -558,13 +556,13 @@ ${(prop.weekday_text) ? `<ul class="collapse" id="opening_hours">${prop.weekday_
             close_method = 'button';
           });
           myModal.addEventListener('hidden.bs.modal', function (event) {
-            if (location.hash.indexOf('#deccid=') < 0) {
+            if (location.hash.indexOf('#dscid=') < 0) {
               return;
             }
             if (currentLayer) {
               currentLayer.eachLayer(mkr => {
                 if (mkr.feature && mkr.feature.properties &&
-                    mkr.feature.properties.id == location.hash.substr(8)) {
+                    mkr.feature.properties.UniqueId == location.hash.substr('#dscid='.length)) {
                   popCardByCurrentFeature(mkr.feature);
                 }
               });
@@ -578,7 +576,7 @@ ${(prop.weekday_text) ? `<ul class="collapse" id="opening_hours">${prop.weekday_
         subDistrictBtns.forEach(s => {
           s.addEventListener('click', (event) => {
             // Changed view level from 15 to 14 , hopefully show more of the district
-            deccMap.setView([s.getAttribute("data-lat"), s.getAttribute("data-lng")], 14);
+            dscMap.setView([s.getAttribute("data-lat"), s.getAttribute("data-lng")], 14);
             // Close opened card when changing district
             card.classList.remove('card--expanded');
             card.classList.add("card--hidden");
@@ -601,7 +599,7 @@ ${(prop.weekday_text) ? `<ul class="collapse" id="opening_hours">${prop.weekday_
         // End of setting event listener
 
         // sideMenubutton events
-        var sideMenubutton = document.querySelectorAll('#decc-nav .navbar-toggler');
+        var sideMenubutton = document.querySelectorAll('#dsc-nav .navbar-toggler');
         sideMenubutton.forEach(s => {
           s.addEventListener('click', (event) => {
           });
@@ -645,7 +643,7 @@ ${(prop.weekday_text) ? `<ul class="collapse" id="opening_hours">${prop.weekday_
       }
       // zoomend event handler
       function zoomendHandler() {
-        var currentZoom = deccMap.getZoom();
+        var currentZoom = dscMap.getZoom();
         if (currentZoom >= 11.5 && currentZoom < 14) {
           red = new defaultSizeIcon({
             iconUrl: 'pin-247.png'
@@ -689,6 +687,7 @@ ${(prop.weekday_text) ? `<ul class="collapse" id="opening_hours">${prop.weekday_
         }
         // Update icon based on the current zoom
         currentLayer.eachLayer(mkr => {
+          /*
           switch (mkr.feature["properties"]["status"]) {
             case 'always_available':
               icon = red;
@@ -699,8 +698,8 @@ ${(prop.weekday_text) ? `<ul class="collapse" id="opening_hours">${prop.weekday_
             case 'closed':
               icon = grey;
               break;
-          }
-          mkr.setIcon(icon);  // Update icon
+          }*/
+          mkr.setIcon(green);  // Update icon
         });
       }
     </script>
